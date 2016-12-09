@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>动态创建带js效果</title>
+	<style type="text/css">
+		*{margin: 0;padding: 0;list-style: none;}
+		#ds,#more{
+			width: 650px;
+			margin: 40px auto;
+		}
+		ul{
+			overflow: hidden;
+		}
+		li{
+			float: left;
+			margin-left: 20px;
+			width: 100px;
+			height: 100px;
+			background: red;
+			color: #fff;
+			text-align: center;
+			line-height: 100px;
+			position: relative;
+			margin-top: 20px;
+			cursor: pointer;
+		}
+		a{
+			text-decoration: none;
+			font:15px '微软雅黑';
+			color: #3c3c3c;
+			margin-right: 50px;
+		}
+		#more{
+			text-align: right;
+		}
+	</style>
+</head>
+<body>
+	<div id="ds">
+		<ul>
+			<li>早上好</li>
+			<li>早上好</li>
+			<li>早上好</li>
+			<li>早上好</li>
+			<li>早上好</li>
+		</ul>
+	</div>
+	<div id="more">
+		<a href="##">更多>></a>
+	</div>
+	<!-- 注意布局 -->
+</body>
+	<script type="text/javascript">
+		var us=document.getElementsByTagName('ul');
+		console.log(us.length);
+		var ls=document.getElementsByTagName('li');
+		console.log(ls.length);
+		var more=document.getElementById('more');
+		var ds=document.getElementById('ds');
+		function usee(obj){//因为在双for循环中会出现找不到style的情况无法实现上移效果，所以用封装函数
+			var tim=null;
+			var num=0;
+			obj.onmouseenter=function(){
+				clearInterval(tim);
+				tim=setInterval(function(){
+					num++;
+					if (num>=8) {
+						clearInterval(tim);
+						num=8;
+					}
+					obj.style.top=-num+'px';
+				},20)
+			}
+			obj.onmouseout=function(){
+				clearInterval(tim);
+				tim=setInterval(function(){
+					num--;
+					if (num<=0) {
+						clearInterval(tim);
+						num=0;
+					}
+					obj.style.top=-num+'px';
+				},20)
+			}
+		}
+		for (var i = 0; i < ls.length; i++) {//循环li的长度实现循环onmouseenter和onmouseout事件
+			usee(ls[i]);
+		}
+		more.onclick=function(){
+			uss=document.createElement('ul');//动态创建ul标签；
+			ds.appendChild(uss);//将动态创建的ul标签插入到ds后面
+			uss.innerHTML='<li>早上好</li><li>早上好</li><li>早上好</li><li>早上好</li><li>早上好</li>';//在新插入的ul中放入和第一行一样的东西，即我们打开页面看到的
+			for (var i = 0; i < ls.length; i++) {//因为在uss中插入的是最开始的东西，所以直接调用上面的
+				usee(ls[i]);
+			}
+		}
+	</script>
+</html>
